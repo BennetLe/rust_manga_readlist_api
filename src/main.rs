@@ -3,7 +3,7 @@
 use mysql::{Pool, PooledConn};
 use crate::routes::options::all_options;
 use crate::routes::manga::{get_all_mangas, create_manga};
-use crate::routes::user_list::{get_all_user_lists};
+use crate::routes::user_list::{get_all_user_lists, create_user_list};
 
 mod cors;
 mod db_layer;
@@ -18,5 +18,5 @@ pub static URL: &str = "mysql://root@localhost:3306/rust_manga_readlist";
 fn rocket() -> _ {
     rocket::build()
         .attach(cors::Cors)
-        .mount("/api", routes![all_options, get_all_mangas, create_manga, get_all_user_lists])
+        .mount("/api", routes![all_options, get_all_mangas, create_manga, get_all_user_lists, create_user_list])
 }
