@@ -1,14 +1,11 @@
 use mysql::*;
 use mysql::prelude::*;
+use rocket::serde::json::Json;
 use crate::URL;
 
-use crate::db_layer;
+use crate::{db_layer, services};
 
-#[derive(Debug, PartialEq, Eq)]
-pub struct  Manga {
-    pub name: String,
-    pub chapters: u32,
-}
+use services::manga::CreateManga;
 
 pub fn get_all() -> Vec<(u32, String, u32, bool, bool)> {
     let mut conn = db_layer::connection::connect();
@@ -17,11 +14,13 @@ pub fn get_all() -> Vec<(u32, String, u32, bool, bool)> {
     return result;
 }
 
-pub fn add() -> u64 {
+pub fn add(
+    mut new_manga: Json<CreateManga>
+) -> u64 {
     let mut conn = db_layer::connection::connect();
     let query = "INSERT INTO mangas (name, chapters) VALUES (?, ?)";
-    let name = "XD";
-    let chapters:u32= 187;
+    let name = new_manga.name.to_owned();
+    let chapters:u32= new_manga.chapters;
     let result = conn.exec_iter(query, (name, chapters)).unwrap();
     return result.affected_rows();
 }

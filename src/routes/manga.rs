@@ -6,12 +6,14 @@ use rocket::response::Redirect;
 
 use crate::{services, db_layer};
 
-#[get("/AllMangas")]
+use services::manga::CreateManga;
+
+#[get("/Manga/all")]
 pub fn get_all_mangas() -> Json<Vec<(u32, String, u32, bool, bool)>> {
     Json(db_layer::manga::get_all())
 }
 
-#[post("/CreateMangaDemo")]
-pub fn create_manga_demo() -> Json<u64> {
-    Json(db_layer::manga::add())
+#[post("/Manga", format = "json", data="<manga>")]
+pub fn create_manga(manga: Json<CreateManga>) -> Json<u64> {
+    Json(db_layer::manga::add(manga))
 }
