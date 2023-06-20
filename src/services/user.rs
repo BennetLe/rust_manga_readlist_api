@@ -10,15 +10,22 @@ use crate::db_layer;
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(crate = "rocket::serde")]
 pub struct User {
-    id: u32,
-    name: String,
-    password: String,
-    admin: bool
+    pub id: u32,
+    pub name: String,
+    pub password: String,
+    pub admin: bool
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(crate = "rocket::serde")]
 pub struct CreateUser {
-    name: String,
-    password: String
+    pub name: String,
+    pub password: String
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(crate = "rocket::serde")]
+pub struct Login{
+    pub name: String,
+    pub password: String
 }
