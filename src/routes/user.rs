@@ -6,9 +6,7 @@ use rocket::response::Redirect;
 
 use crate::{services, db_layer};
 
-use services::user;
-
-#[post("/Manga", format = "json", data="<manga>")]
-pub fn login(cookies: &CookieJar<'_>) {
+#[post("/User/login", format = "json", data="<login>")]
+pub fn login(cookies: &CookieJar<'_>, login: Json<services::user::Login>) {
 
 }
