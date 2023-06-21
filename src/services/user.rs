@@ -29,3 +29,9 @@ pub struct Login{
     pub name: String,
     pub password: String
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(crate = "rocket::serde")]
+pub struct LoginResult{
+    pub success: bool
+}

@@ -6,7 +6,10 @@ use rocket::response::Redirect;
 
 use crate::{services, db_layer};
 
-#[post("/User/login", format = "json", data="<login>")]
-pub fn login(cookies: &CookieJar<'_>, login: Json<services::user::Login>) {
-
+#[post("/User/login", format = "json", data="<credentials>")]
+pub fn login(cookies: &CookieJar<'_>, credentials: Json<services::user::Login>) -> Json<services::user::LoginResult> {
+    let success = services::user::LoginResult{
+        success: db_layer::user::login(cookies, credentials)
+    };
+    return Json(success)
 }
