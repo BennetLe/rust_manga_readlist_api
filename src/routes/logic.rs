@@ -6,7 +6,7 @@ use rocket::response::Redirect;
 
 use crate::{services, db_layer};
 
-#[post("/MangaList/all")]
+#[get("/MangaList/all")]
 pub fn get_all_user_mangas(cookies: &CookieJar<'_>) -> Json<Vec<(u32, String, String, u32)>> {
     let cookie_json = Json(
         services::logic::Cookie {
