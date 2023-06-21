@@ -1875,6 +1875,7 @@ dependencies = [
 name = "rust_manga_readlist_api"
 version = "0.1.0"
 dependencies = [
+ "base64",
  "mysql",
  "rocket",
  "serde",
