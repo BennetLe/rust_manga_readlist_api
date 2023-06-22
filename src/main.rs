@@ -32,3 +32,8 @@ fn rocket() -> _ {
             add_manga_to_list,
         ])
 }
+
+// TODO: Add an Endpoint to update the current chapter
+// TODO: Add an Endpoint to see all list + mangas in a specific list
+// TODO: Add an Endpoint for Admins to change the chapter count of a Manga
+// TODO: Add an Endpoint to create an Account
