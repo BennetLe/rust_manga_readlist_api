@@ -1,5 +1,6 @@
 use mysql::*;
 use mysql::prelude::*;
+use rocket::http::CookieJar;
 use rocket::serde::json::Json;
 use crate::URL;
 
@@ -15,12 +16,23 @@ pub fn get_all() -> Vec<(u32, String, bool, u32)> {
 }
 
 pub fn create(
-    mut new_user_list: Json<CreateUserList>
+    new_user_list: Json<CreateUserList>,
+    cookie: &CookieJar<'_>
 ) -> u64 {
-    let mut conn = db_layer::connection::connect();
-    let query = "INSERT INTO user_list (name, user_id) VALUES (?, ?)";
-    let name = new_user_list.name.to_owned();
-    let user_id = new_user_list.user_id;
-    let result = conn.exec_iter(query, (name, user_id)).unwrap();
-    return result.affected_rows();
+    let cookie_session = cookie.get("session").unwrap().value();
+    let user_id = db_layer::user::get_id_by_session(cookie_session.to_string());
+
+    if user_id >= 1 {
+        let mut conn = db_layer::connection::connect();
+        let query = "INSERT INTO user_list (name, user_id) VALUES (?, ?)";
+        let name = new_user_list.name.to_owned();
+        let result = conn.exec_iter(query, (name, user_id)).unwrap();
+        return result.affected_rows();
+    };
+
+    return 0;
 }
+
+pub fn add_maga_to_list(
+
+)

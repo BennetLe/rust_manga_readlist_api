@@ -20,5 +20,4 @@ pub struct UserList {
 #[serde(crate = "rocket::serde")]
 pub struct CreateUserList {
     pub name: String,
-    pub user_id: u32,
 }

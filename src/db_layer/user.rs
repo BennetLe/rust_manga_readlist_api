@@ -5,6 +5,7 @@ use crate::URL;
 use uuid::{uuid, Uuid};
 use rocket::http::{CookieJar, Cookie};
 use base64::{engine as _, engine::{self, general_purpose}, alphabet, Engine};
+use rocket::form::validate::len;
 
 use crate::{db_layer, services};
 
@@ -52,8 +53,12 @@ pub fn get_id_by_session(
     let result = conn.query(query).unwrap();
 
     println!("GetIdBySession: {:?}", result);
+    
+    if result.len() >= 1 {
+        return result[0];
+    }
 
-    return result[0];
+    return 0;
 }
 
 pub fn logout(
