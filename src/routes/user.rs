@@ -13,3 +13,8 @@ pub fn login(cookies: &CookieJar<'_>, credentials: Json<services::user::Login>) 
     };
     return Json(success)
 }
+
+#[post("/User/logout")]
+pub fn logout(cookies: &CookieJar<'_>) {
+    db_layer::user::logout(cookies)
+}

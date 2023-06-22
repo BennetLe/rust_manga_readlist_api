@@ -4,6 +4,7 @@ use rocket::serde::json::Json;
 use crate::URL;
 use uuid::{uuid, Uuid};
 use rocket::http::{CookieJar, Cookie};
+use base64::{engine as _, engine::{self, general_purpose}, alphabet, Engine};
 
 use crate::{db_layer, services};
 
@@ -23,8 +24,12 @@ pub fn login(
     }
 
     let uuid = Uuid::new_v4();
+    let uuid = general_purpose::STANDARD.encode(uuid);
+
+    println!("Session: {}", uuid);
+
     let query = "INSERT INTO user_auth_cookie (user_id, cookie) VALUES (?, ?) ON DUPLICATE KEY UPDATE cookie=?";
-    let result = conn.exec_iter(query, (user_id.clone(), uuid, uuid)).unwrap();
+    let result = conn.exec_iter(query, (user_id.clone(), uuid.clone(), uuid.clone())).unwrap();
 
     if result.affected_rows() == 0 {
         return false
@@ -37,9 +42,36 @@ pub fn login(
 
 pub fn get_id_by_session(
     cookie: String
-) -> Vec<(u32)> {
+) -> u32 {
     let mut conn = db_layer::connection::connect();
-    let query = "SELECT user.id FROM user JOIN user_auth_cookie uac on user.id = uac.user_id WHERE uac.cookie = ?";
-    let result = conn.exec(query, (cookie, )).unwrap();
-    return result;
+
+    println!("{}", cookie);
+
+    let query = "SELECT user.id FROM user JOIN user_auth_cookie uac on user.id = uac.user_id WHERE uac.cookie = \"".to_owned()+&cookie.to_owned()+"\"";
+
+    let result = conn.query(query).unwrap();
+
+    println!("GetIdBySession: {:?}", result);
+
+    return result[0];
+}
+
+pub fn logout(
+    cookies: &CookieJar<'_>
+) {
+    cookies.remove(Cookie::named("session"))
+}
+
+pub fn is_admin(
+    user_id: u32
+) -> bool {
+    let mut conn = db_layer::connection::connect();
+    let query = "SELECT admin from user where id = ?";
+    let result = conn.exec(query, (user_id, )).unwrap();
+    println!("IsAdmin: {:?}", result);
+    if result.is_empty() {
+        return false;
+    }
+
+    return result[0];
 }
