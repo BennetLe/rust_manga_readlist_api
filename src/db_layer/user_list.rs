@@ -41,9 +41,25 @@ pub fn create(
 }
 
 pub fn add_maga_to_list(
+    cookie: &CookieJar<'_>,
     manga_list: Json<AddMangaToList>
-) -> u8 {
+) -> u64 {
+    let mut conn = db_layer::connection::connect();
+    let cookie_session = cookie.get("session").unwrap().value();
+    let user_id = db_layer::user::get_id_by_session(cookie_session.to_string());
+    let query = "SELECT user_id FROM user_list WHERE user_id = ? AND id = ?";
+    let result: Vec<u32> = conn.exec(query, (user_id, manga_list.user_list_id.clone())).unwrap();
 
+    if result.len() == 0 {
+        return 0;
+    }
+
+    if result[0] >= 1 {
+        let query = "INSERT INTO manga_list (manga_id, user_list_id, current_chapter) VALUES (?, ?, 0)";
+        let result = conn.exec_iter(query, (manga_list.manga_id, manga_list.user_list_id)).unwrap();
+
+        return result.affected_rows();
+    }
 
     return 0;
 }

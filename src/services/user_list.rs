@@ -21,3 +21,10 @@ pub struct UserList {
 pub struct CreateUserList {
     pub name: String,
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(crate = "rocket::serde")]
+pub struct AddMangaToList {
+    pub manga_id: u32,
+    pub user_list_id: u32
+}
