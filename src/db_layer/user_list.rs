@@ -26,19 +26,16 @@ pub fn create(
     let result :Vec<u32> = conn.exec(query, (name.clone(), )).unwrap();
 
     if result.is_empty() {
-        return 0;
+        let cookie_session = cookie.get("session").unwrap().value();
+        let user_id = db_layer::user::get_id_by_session(cookie_session.to_string());
+
+        if user_id >= 1 {
+            let mut conn = db_layer::connection::connect();
+            let query = "INSERT INTO user_list (name, user_id) VALUES (?, ?)";
+            let result = conn.exec_iter(query, (name, user_id)).unwrap();
+            return result.affected_rows();
+        };
     }
-
-
-    let cookie_session = cookie.get("session").unwrap().value();
-    let user_id = db_layer::user::get_id_by_session(cookie_session.to_string());
-
-    if user_id >= 1 {
-        let mut conn = db_layer::connection::connect();
-        let query = "INSERT INTO user_list (name, user_id) VALUES (?, ?)";
-        let result = conn.exec_iter(query, (name, user_id)).unwrap();
-        return result.affected_rows();
-    };
 
     return 0;
 }
