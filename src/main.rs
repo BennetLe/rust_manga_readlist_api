@@ -3,7 +3,7 @@
 use mysql::{Pool, PooledConn};
 use crate::routes::options::all_options;
 use crate::routes::manga::{get_all_mangas, create_manga};
-use crate::routes::user_list::{get_all_user_lists, create_user_list};
+use crate::routes::user_list::{get_all_user_lists, create_user_list, add_manga_to_list};
 use crate::routes::logic::{get_all_user_mangas};
 use crate::routes::user::{login, logout};
 
@@ -29,5 +29,6 @@ fn rocket() -> _ {
             get_all_user_mangas,
             login,
             logout,
+            add_manga_to_list,
         ])
 }
