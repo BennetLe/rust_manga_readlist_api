@@ -1,0 +1,53 @@
+create table mangas
+(
+    id         int unsigned auto_increment
+        primary key,
+    name       mediumtext           not null,
+    chapters   int unsigned         not null,
+    finished   tinyint(1) default 0 not null,
+    no_updates tinyint(1) default 0 not null
+);
+
+create table user
+(
+    id       int unsigned auto_increment
+        primary key,
+    name     mediumtext           not null,
+    password longtext             not null,
+    admin    tinyint(1) default 0 null
+);
+
+create table user_auth_cookie
+(
+    user_id  int unsigned                          not null
+        primary key,
+    cookie   longtext                              null,
+    last_use timestamp default current_timestamp() not null,
+    constraint user_auth_cookie_user_id_fk
+        foreign key (user_id) references user (id)
+);
+
+create table user_list
+(
+    id      int unsigned auto_increment
+        primary key,
+    name    mediumtext           not null,
+    private tinyint(1) default 1 null,
+    user_id int unsigned         null,
+    constraint user_list_user_id_fk
+        foreign key (user_id) references user (id)
+);
+
+create table manga_list
+(
+    id              int unsigned auto_increment
+        primary key,
+    manga_id        int unsigned null,
+    user_list_id    int unsigned null,
+    current_chapter int unsigned null,
+    constraint manga_list_mangas_id_fk
+        foreign key (manga_id) references mangas (id),
+    constraint manga_list_user_lists_id_fk
+        foreign key (user_list_id) references user_list (id)
+);
+
