@@ -45,16 +45,9 @@ pub fn add_maga_to_list(
     manga_list: Json<AddMangaToList>
 ) -> u64 {
     let mut conn = db_layer::connection::connect();
-    let cookie_session = cookie.get("session").unwrap().value();
-    let user_id = db_layer::user::get_id_by_session(cookie_session.to_string());
-    let query = "SELECT user_id FROM user_list WHERE user_id = ? AND id = ?";
-    let result: Vec<u32> = conn.exec(query, (user_id, manga_list.user_list_id.clone())).unwrap();
+    let result = is_owner_of_list(cookie, manga_list.user_list_id.clone());
 
-    if result.len() == 0 {
-        return 0;
-    }
-
-    if result[0] >= 1 {
+    if result {
         let query = "INSERT INTO manga_list (manga_id, user_list_id, current_chapter) VALUES (?, ?, 0)";
         let result = conn.exec_iter(query, (manga_list.manga_id, manga_list.user_list_id)).unwrap();
 
@@ -62,4 +55,23 @@ pub fn add_maga_to_list(
     }
 
     return 0;
+}
+
+pub fn is_owner_of_list(
+    cookie: &CookieJar<'_>,
+    user_list_id: u32
+) -> bool{
+    let mut conn = db_layer::connection::connect();
+    let cookie_session = cookie.get("session").unwrap().value();
+    let user_id = db_layer::user::get_id_by_session(cookie_session.to_string());
+    let query = "SELECT user_id FROM user_list WHERE user_id = ? AND id = ?";
+    let result: Vec<u32> = conn.exec(query, (user_id, user_list_id)).unwrap();
+
+    if result.len() == 0 {
+        return false
+    }
+    if result[0] >= 1 {
+        return true
+    }
+    return false
 }
