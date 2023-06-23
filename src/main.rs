@@ -3,7 +3,7 @@
 use mysql::{Pool, PooledConn};
 use crate::routes::options::all_options;
 use crate::routes::manga::{get_all_mangas, create_manga};
-use crate::routes::user_list::{get_all_user_lists, create_user_list, add_manga_to_list};
+use crate::routes::user_list::{get_all_user_lists, create_user_list, add_manga_to_list, update_current_chapter};
 use crate::routes::logic::{get_all_user_mangas};
 use crate::routes::user::{login, logout};
 
@@ -21,19 +21,18 @@ fn rocket() -> _ {
     rocket::build()
         .attach(cors::Cors)
         .mount("/api", routes![
-            all_options,
-            get_all_mangas,
-            create_manga,
-            get_all_user_lists,
-            create_user_list,
-            get_all_user_mangas,
-            login,
-            logout,
-            add_manga_to_list,
+                all_options,
+                get_all_mangas,
+                create_manga,
+                get_all_user_lists,
+                create_user_list,
+                get_all_user_mangas,
+                login,logout,
+                add_manga_to_list,
+                update_current_chapter,
         ])
 }
 
-// TODO: Add an Endpoint to update the current chapter
 // TODO: Add an Endpoint to see all list + mangas in a specific list
 // TODO: Add an Endpoint for Admins to change the chapter count of a Manga
 // TODO: Add an Endpoint to create an Account

@@ -28,3 +28,10 @@ pub struct AddMangaToList {
     pub manga_id: u32,
     pub user_list_id: u32
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(crate = "rocket::serde")]
+pub struct UpdateCurrentChapter {
+    pub manga_list_id: u32,
+    pub current_chapter: u32
+}
