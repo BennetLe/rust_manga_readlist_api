@@ -23,3 +23,10 @@ pub struct CreateManga {
     pub name: String,
     pub chapters: u32,
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(crate = "rocket::serde")]
+pub struct UpdateChapters {
+    pub chapter: u32,
+    pub id: u32
+}
