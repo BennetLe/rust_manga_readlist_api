@@ -10,8 +10,8 @@ use services::user_list::CreateUserList;
 use crate::services::user_list::{AddMangaToList, UpdateCurrentChapter};
 
 #[get("/UserList/all")]
-pub fn get_all_user_lists() -> Json<Vec<(u32, String, bool, u32)>> {
-    Json(db_layer::user_list::get_all())
+pub fn get_all_user_lists(cookies: &CookieJar<'_>) -> Json<Vec<(u32, String, bool, u32)>> {
+    Json(db_layer::user_list::get_all(cookies))
 }
 
 #[post("/UserList", format="json", data="<user_list>")]
