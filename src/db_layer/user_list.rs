@@ -25,6 +25,21 @@ pub fn get_all(
     return result;
 }
 
+pub fn get(
+    cookie: &CookieJar<'_>,
+    list_id: u32
+) -> Vec<(u32, String, u32, u32)> {
+    let mut conn = db_layer::connection::connect();
+    if cookie.get("session") == None {
+        return Vec::new()
+    }
+    let cookie_session = cookie.get("session").unwrap().value();
+    let user_id = db_layer::user::get_id_by_session(cookie_session.to_string());
+    let query = "SELECT * FROM user_list WHERE user_id = ? AND id = ?";
+    let result: Vec<(u32, String, u32, u32)> = conn.exec(query, (user_id, list_id)).unwrap();
+    return result
+}
+
 pub fn create(
     new_user_list: Json<CreateUserList>,
     cookie: &CookieJar<'_>
