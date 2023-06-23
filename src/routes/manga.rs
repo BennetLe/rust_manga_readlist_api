@@ -7,6 +7,7 @@ use rocket::response::Redirect;
 use crate::{services, db_layer};
 
 use services::manga::CreateManga;
+use crate::services::manga::UpdateChapters;
 
 #[get("/Manga/all")]
 pub fn get_all_mangas() -> Json<Vec<(u32, String, u32, bool, bool)>> {
@@ -29,4 +30,9 @@ pub fn create_manga(manga: Json<CreateManga>, cookie: &CookieJar<'_>) -> Json<u6
     };
 
     return Json(0)
+}
+
+#[post("/Manga/update/chapter", format = "json", data="<chapter_json>")]
+pub fn update_manga_chapters(cookies: &CookieJar<'_>, chapter_json: Json<UpdateChapters>) -> Json<u64> {
+    return Json(db_layer::manga::update_chapter_count(cookies, chapter_json))
 }

@@ -35,3 +35,9 @@ pub struct UpdateCurrentChapter {
     pub manga_list_id: u32,
     pub current_chapter: u32
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(crate = "rocket::serde")]
+pub struct GetUserList {
+    pub id: u32
+}

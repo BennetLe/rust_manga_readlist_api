@@ -12,3 +12,12 @@ use crate::db_layer;
 pub struct Cookie{
     pub cookie: String
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(crate = "rocket::serde")]
+pub struct AllUserManga {
+    pub manga_list_id: u32,
+    pub user_name: String,
+    pub manga_name: String,
+    pub manga_list_chapter: u32
+}

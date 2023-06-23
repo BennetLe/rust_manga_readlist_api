@@ -18,3 +18,8 @@ pub fn login(cookies: &CookieJar<'_>, credentials: Json<services::user::Login>) 
 pub fn logout(cookies: &CookieJar<'_>) {
     db_layer::user::logout(cookies)
 }
+
+#[post("/User/create", format = "json", data="<user>")]
+pub fn create_account(user: Json<services::user::CreateUser>) -> Json<u64> {
+    return Json(db_layer::user::create_account(user))
+}

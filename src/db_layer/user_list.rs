@@ -9,11 +9,35 @@ use crate::{db_layer, services};
 use services::user_list::CreateUserList;
 use crate::services::user_list::{AddMangaToList, UpdateCurrentChapter};
 
-pub fn get_all() -> Vec<(u32, String, bool, u32)> {
+pub fn get_all(
+    cookie: &CookieJar<'_>
+) -> Vec<(u32, String, bool, u32)> {
     let mut conn = db_layer::connection::connect();
-    let query = "SELECT * FROM user_list";
-    let result = conn.query(query).unwrap();
+
+    if cookie.get("session") == None {
+        return Vec::new()
+    }
+
+    let cookie_session = cookie.get("session").unwrap().value();
+    let user_id = db_layer::user::get_id_by_session(cookie_session.to_string());
+    let query = "SELECT * FROM user_list WHERE user_id = ?";
+    let result: Vec<(u32, String, bool, u32)> = conn.exec(query, (user_id, )).unwrap();
     return result;
+}
+
+pub fn get(
+    cookie: &CookieJar<'_>,
+    list_id: u32
+) -> Vec<(u32, String, u32, u32)> {
+    let mut conn = db_layer::connection::connect();
+    if cookie.get("session") == None {
+        return Vec::new()
+    }
+    let cookie_session = cookie.get("session").unwrap().value();
+    let user_id = db_layer::user::get_id_by_session(cookie_session.to_string());
+    let query = "SELECT * FROM user_list WHERE user_id = ? AND id = ?";
+    let result: Vec<(u32, String, u32, u32)> = conn.exec(query, (user_id, list_id)).unwrap();
+    return result
 }
 
 pub fn create(
