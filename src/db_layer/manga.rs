@@ -8,10 +8,10 @@ use crate::{db_layer, services};
 
 use services::manga::CreateManga;
 
-pub fn get_all() -> Vec<(u32, String, u32, bool, bool)> {
+pub fn get_all() -> Vec<(services::manga::Manga)> {
     let mut conn = db_layer::connection::connect();
     let query = "SELECT * FROM mangas";
-    let result = conn.query(query).unwrap();
+    let result= conn.query(query).unwrap();
     return result;
 }
 

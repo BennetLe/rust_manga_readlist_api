@@ -10,7 +10,7 @@ use services::manga::CreateManga;
 use crate::services::manga::UpdateChapters;
 
 #[get("/Manga/all")]
-pub fn get_all_mangas() -> Json<Vec<(u32, String, u32, bool, bool)>> {
+pub fn get_all_mangas() -> Json<Vec<(services::manga::Manga)>> {
     Json(db_layer::manga::get_all())
 }
 

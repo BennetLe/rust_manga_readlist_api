@@ -7,7 +7,7 @@ use rocket::response::{Flash, Redirect};
 
 use crate::db_layer;
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone,PartialEq,Eq,PartialOrd,Ord,Hash,Debug,Serialize,Deserialize, FromRow)]
 #[serde(crate = "rocket::serde")]
 pub struct Manga {
     pub id: u32,
