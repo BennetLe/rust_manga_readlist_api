@@ -10,7 +10,7 @@ use services::manga::CreateManga;
 
 pub fn get_all() -> Vec<(services::manga::Manga)> {
     let mut conn = db_layer::connection::connect();
-    let query = "SELECT * FROM mangas";
+    let query = "SELECT id, name, chapters, finished, no_updates FROM mangas";
     let result= conn.query(query).unwrap();
     return result;
 }
