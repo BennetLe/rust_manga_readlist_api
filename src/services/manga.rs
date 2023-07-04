@@ -17,14 +17,14 @@ pub struct Manga {
     pub no_updates: bool,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone,PartialEq,Eq,PartialOrd,Ord,Hash,Debug,Serialize,Deserialize, FromRow)]
 #[serde(crate = "rocket::serde")]
 pub struct CreateManga {
     pub name: String,
     pub chapters: u32,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone,PartialEq,Eq,PartialOrd,Ord,Hash,Debug,Serialize,Deserialize, FromRow)]
 #[serde(crate = "rocket::serde")]
 pub struct UpdateChapters {
     pub chapter: u32,

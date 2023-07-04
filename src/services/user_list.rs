@@ -7,7 +7,7 @@ use rocket::response::{Flash, Redirect};
 
 use crate::db_layer;
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone,PartialEq,Eq,PartialOrd,Ord,Hash,Debug,Serialize,Deserialize, FromRow)]
 #[serde(crate = "rocket::serde")]
 pub struct UserList {
     pub id: u32,
@@ -16,27 +16,27 @@ pub struct UserList {
     pub user_id: u32,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone,PartialEq,Eq,PartialOrd,Ord,Hash,Debug,Serialize,Deserialize, FromRow)]
 #[serde(crate = "rocket::serde")]
 pub struct CreateUserList {
     pub name: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone,PartialEq,Eq,PartialOrd,Ord,Hash,Debug,Serialize,Deserialize, FromRow)]
 #[serde(crate = "rocket::serde")]
 pub struct AddMangaToList {
     pub manga_id: u32,
     pub user_list_id: u32
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone,PartialEq,Eq,PartialOrd,Ord,Hash,Debug,Serialize,Deserialize, FromRow)]
 #[serde(crate = "rocket::serde")]
 pub struct UpdateCurrentChapter {
     pub manga_list_id: u32,
     pub current_chapter: u32
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone,PartialEq,Eq,PartialOrd,Ord,Hash,Debug,Serialize,Deserialize, FromRow)]
 #[serde(crate = "rocket::serde")]
 pub struct GetUserList {
     pub id: u32

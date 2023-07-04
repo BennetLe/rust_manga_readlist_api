@@ -20,6 +20,6 @@ pub fn logout(cookies: &CookieJar<'_>) {
 }
 
 #[post("/User/create", format = "json", data="<user>")]
-pub fn create_account(user: Json<services::user::CreateUser>) -> Json<u64> {
-    return Json(db_layer::user::create_account(user))
+pub fn create_account(user: Json<services::user::CreateUser>) -> Json<services::user::LoginResult> {
+    return db_layer::user::create_account(user)
 }

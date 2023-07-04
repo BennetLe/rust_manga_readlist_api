@@ -7,17 +7,16 @@ use rocket::response::{Flash, Redirect};
 
 use crate::db_layer;
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone,PartialEq,Eq,PartialOrd,Ord,Hash,Debug,Serialize,Deserialize, FromRow)]
 #[serde(crate = "rocket::serde")]
 pub struct Cookie{
     pub cookie: String
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone,PartialEq,Eq,PartialOrd,Ord,Hash,Debug,Serialize,Deserialize, FromRow)]
 #[serde(crate = "rocket::serde")]
 pub struct AllUserManga {
-    pub manga_list_id: u32,
-    pub user_name: String,
-    pub manga_name: String,
-    pub manga_list_chapter: u32
+    pub id: u32,
+    pub name: String,
+    pub current_chapter: u32
 }

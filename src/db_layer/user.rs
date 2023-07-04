@@ -83,14 +83,23 @@ pub fn is_admin(
 
 pub fn create_account(
     account: Json<CreateUser>
-) -> u64 {
+) -> Json<services::user::LoginResult> {
     let mut conn = db_layer::connection::connect();
     let query = "SELECT id FROM user WHERE name = ?";
     let result: Vec<(u32)> = conn.exec(query, (account.name.clone(), )).unwrap();
     if result.is_empty() {
         let query = "INSERT INTO user (name, password) VALUES (?, ?)";
         let result = conn.exec_iter(query, (account.name.to_owned(), account.password.to_owned())).unwrap();
-        return result.affected_rows()
+        let affected = result.affected_rows();
+        return Json(
+            services::user::LoginResult {
+                success: if affected == 1 { true } else { false }
+            }
+        )
     }
-    return 0
+    return Json(
+        services::user::LoginResult {
+            success: false
+        }
+    )
 }

@@ -7,7 +7,7 @@ use rocket::response::{Flash, Redirect};
 
 use crate::db_layer;
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone,PartialEq,Eq,PartialOrd,Ord,Hash,Debug,Serialize,Deserialize, FromRow)]
 #[serde(crate = "rocket::serde")]
 pub struct User {
     pub id: u32,
@@ -16,22 +16,23 @@ pub struct User {
     pub admin: bool
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone,PartialEq,Eq,PartialOrd,Ord,Hash,Debug,Serialize,Deserialize, FromRow)]
 #[serde(crate = "rocket::serde")]
 pub struct CreateUser {
     pub name: String,
     pub password: String
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone,PartialEq,Eq,PartialOrd,Ord,Hash,Debug,Serialize,Deserialize, FromRow)]
 #[serde(crate = "rocket::serde")]
 pub struct Login{
     pub name: String,
     pub password: String
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Clone,PartialEq,Eq,PartialOrd,Ord,Hash,Debug,Serialize,Deserialize, FromRow)]
 #[serde(crate = "rocket::serde")]
 pub struct LoginResult{
     pub success: bool
 }
+
