@@ -20,3 +20,9 @@ pub struct AllUserManga {
     pub name: String,
     pub current_chapter: u32
 }
+
+#[derive(Clone,PartialEq,Eq,PartialOrd,Ord,Hash,Debug,Serialize,Deserialize, FromRow)]
+#[serde(crate = "rocket::serde")]
+pub struct Success {
+    pub success: bool
+}

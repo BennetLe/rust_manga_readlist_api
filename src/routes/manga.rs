@@ -15,9 +15,11 @@ pub fn get_all_mangas() -> Json<Vec<(services::manga::Manga)>> {
 }
 
 #[post("/Manga", format = "json", data="<manga>")]
-pub fn create_manga(manga: Json<CreateManga>, cookie: &CookieJar<'_>) -> Json<u64> {
+pub fn create_manga(manga: Json<CreateManga>, cookie: &CookieJar<'_>) -> Json<services::logic::Success> {
     if cookie.get("session").is_none() {
-        return Json(0)
+        return Json(services::logic::Success{
+            success:false
+        })
     };
 
     let cookie_session = cookie.get("session").unwrap().value();
@@ -26,13 +28,19 @@ pub fn create_manga(manga: Json<CreateManga>, cookie: &CookieJar<'_>) -> Json<u6
     let is_admin = db_layer::user::is_admin(user_id);
 
     if is_admin {
-        return Json(db_layer::manga::add(manga))
+        return Json(services::logic::Success{
+            success: if db_layer::manga::add(manga)==1 {true} else { false }
+        })
     };
 
-    return Json(0)
+    return Json(services::logic::Success{
+        success:false
+    })
 }
 
 #[post("/Manga/update/chapter", format = "json", data="<chapter_json>")]
-pub fn update_manga_chapters(cookies: &CookieJar<'_>, chapter_json: Json<UpdateChapters>) -> Json<u64> {
-    return Json(db_layer::manga::update_chapter_count(cookies, chapter_json))
+pub fn update_manga_chapters(cookies: &CookieJar<'_>, chapter_json: Json<UpdateChapters>) -> Json<services::logic::Success> {
+    return Json(services::logic::Success{
+        success: if db_layer::manga::update_chapter_count(cookies, chapter_json)==1 {true} else { false }
+    })
 }
